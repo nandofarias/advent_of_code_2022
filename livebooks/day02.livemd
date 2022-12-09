@@ -1,0 +1,91 @@
+# Day 2
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.5.0"}
+])
+
+input = Kino.Input.textarea("Paste input here:")
+```
+
+## Part 1
+
+```elixir
+opponent_map = %{"A" => :rock, "B" => :paper, "C" => :scissor}
+elf_map = %{"X" => :rock, "Y" => :paper, "Z" => :scissor}
+choice_point = %{rock: 1, paper: 2, scissor: 3}
+
+play_result = fn
+  :rock, :scissor ->
+    6
+
+  :scissor, :paper ->
+    6
+
+  :paper, :rock ->
+    6
+
+  x, x ->
+    3
+
+  _, _ ->
+    0
+end
+
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+|> Enum.map(fn line ->
+  [opponent, mine] = String.split(line, " ")
+  opponent = opponent_map[opponent]
+  mine = elf_map[mine]
+
+  play_result.(mine, opponent) + choice_point[mine]
+end)
+|> Enum.sum()
+```
+
+## Part 2
+
+```elixir
+opponent_map = %{"A" => :rock, "B" => :paper, "C" => :scissor}
+elf_map = %{"X" => :lose, "Y" => :draw, "Z" => :win}
+result_point = %{win: 6, draw: 3, lose: 0}
+choice_point = %{rock: 1, paper: 2, scissor: 3}
+
+should_play = fn
+  :win, :scissor ->
+    :rock
+
+  :win, :paper ->
+    :scissor
+
+  :win, :rock ->
+    :paper
+
+  :lose, :scissor ->
+    :paper
+
+  :lose, :paper ->
+    :rock
+
+  :lose, :rock ->
+    :scissor
+
+  :draw, x ->
+    x
+end
+
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+|> Enum.map(fn line ->
+  [opponent, mine] = String.split(line, " ")
+  opponent = opponent_map[opponent]
+  elf_result = elf_map[mine]
+  mine = should_play.(elf_result, opponent)
+
+  result_point[elf_result] + choice_point[mine]
+end)
+|> Enum.sum()
+```

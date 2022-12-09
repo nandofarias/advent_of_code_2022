@@ -1,7 +1,8 @@
-# Advent of Code 2021
+# Advent of Code 2022
 
 ## Index
 
 Requires Livebook v0.5+.
 
 * [Day 1](day01.livemd)
+* [Day 2](day02.livemd)
