@@ -1,0 +1,51 @@
+# Day 3
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.5.0"}
+])
+
+input = Kino.Input.textarea("Paste input here:")
+```
+
+## Part 1
+
+```elixir
+priority = Enum.concat(?a..?z, ?A..?Z) |> Enum.with_index(1) |> Map.new()
+
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+|> Enum.map(fn rucksack ->
+  middle = floor(String.length(rucksack) / 2)
+
+  {left, right} =
+    rucksack
+    |> String.to_charlist()
+    |> Enum.split(middle)
+
+  MapSet.intersection(MapSet.new(left), MapSet.new(right)) |> MapSet.to_list()
+end)
+|> Enum.reduce(0, fn [x], acc -> priority[x] + acc end)
+```
+
+## Part 2
+
+```elixir
+priority = Enum.concat(?a..?z, ?A..?Z) |> Enum.with_index(1) |> Map.new()
+
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+|> Enum.chunk_every(3)
+|> Enum.map(fn [rucksack_1, rucksack_2, rucksack_3] ->
+  rucksack_1 = rucksack_1 |> String.to_charlist() |> MapSet.new()
+  rucksack_2 = rucksack_2 |> String.to_charlist() |> MapSet.new()
+  rucksack_3 = rucksack_3 |> String.to_charlist() |> MapSet.new()
+
+  MapSet.intersection(rucksack_1, rucksack_2)
+  |> MapSet.intersection(rucksack_3)
+  |> MapSet.to_list()
+end)
+|> Enum.reduce(0, fn [x], acc -> priority[x] + acc end)
+```

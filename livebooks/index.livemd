@@ -6,3 +6,26 @@ Requires Livebook v0.5+.
 
 * [Day 1](day01.livemd)
 * [Day 2](day02.livemd)
+* [Day 3](day03.livemd)
+
+## Setup template
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.5.0"}
+])
+
+input = Kino.Input.textarea("Paste input here:")
+```
+
+<!-- livebook:{"break_markdown":true} -->
+
+<!-- livebook:{"force_markdown":true} -->
+
+```elixir
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+```
